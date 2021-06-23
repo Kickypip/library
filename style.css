@@ -1,0 +1,9 @@
+#main-title {
+    text-align: center;
+}
+
+.book-container {
+    border: 2px solid black;
+    border-radius: 8px;
+    max-width: 300px;
+}
