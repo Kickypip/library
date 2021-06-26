@@ -5,18 +5,36 @@
         <title>Digital Library</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="normalize.css">
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <h1 id="main-title">Library</h1>
+        <div id="header">
+            <h1 id="main-title">Library</h1>
+            <button id="add-book">Add Book</button>
+        </div>
 
-        <div class="book-container">
-           <h2 class="book-title">Test Title</h2>
-           <h3 class="book-author">Author Test</h3>
-           <h4 class="book-pages">Test Pages</h4>
-           <span class="book-status-text">Read</span>
-           <input type="checkbox" class="book-status">
+        <div id="main-content">
 
+        </div>
+
+        <div id="add-book-modal">
+            <button id="modal-close">Close</button>
+            <h2>Add Book</h2>
+            <form id="modal-form">
+                <label for="modal-title">Title</label>
+                <input id="modal-title" type="text" name="modal-title" required>
+    
+                <label for="modal-author">Author</label>
+                <input id="modal-author" type="text" name="modal-author" required>
+    
+                <label for="modal-pages">Page Count</label>
+                <input id="modal-pages" type="text" name="modal-pages">
+    
+                <label for="modal-read">Read Status</label>
+                <input id="modal-read" type="checkbox" name="modal-read">
+            </form>
+            <button id="submit-book">Submit</button>
         </div>
 
         <script src="script.js" async defer></script>
