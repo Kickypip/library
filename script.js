@@ -1,4 +1,7 @@
 let libraryContainer = [];
+if (localStorage.libraryContainer) {
+    libraryContainer = JSON.parse(localStorage.libraryContainer);
+}
 
 class Book {
     constructor(title, author, pages, hasRead) {
@@ -12,6 +15,7 @@ class Book {
 function addBook(title, author, pages, hasRead) {
     let newBook = new Book(title, author, pages, hasRead);
     libraryContainer.push(newBook);
+    localStorage.libraryContainer = JSON.stringify(libraryContainer);
 }
 
 function displayBook(book) {
@@ -26,10 +30,12 @@ function displayBook(book) {
     bookAuthor.classList.add('book-author');
     bookAuthor.innerText = book.author;
 
-    let bookPages = document.createElement('h4');
+    bookPages = document.createElement('h4');
     bookPages.classList.add('book-pages')
-    bookPages.innerText = `${book.pages} pages`;
-
+    if (book.pages) {
+        bookPages.innerText = `${book.pages} pages`;
+    }
+    
     let hasReadText = document.createElement('span');
     hasReadText.classList.add('book-status-text');
     hasReadText.innerText = 'Read Status';
@@ -40,6 +46,9 @@ function displayBook(book) {
     if (book.hasRead) {
         readStatus.checked = true;
     }
+    readStatus.addEventListener('click', function () {
+        toggleReadStatus(this);
+    })
 
     let deleteBookBtn = document.createElement('button');
     deleteBookBtn.classList.add('book-delete');
@@ -81,6 +90,12 @@ submitBook.addEventListener('click', function () {
     let authorValue = document.getElementById('modal-author').value;
     let pageCountValue = document.getElementById('modal-pages').value;
     let readStatus = document.getElementById('modal-read').checked;
+
+    if (!titleValue) {
+        return;
+    } else if (!pageCountValue) {
+        pageCountValue = null;
+    }
     addBook(titleValue, authorValue, pageCountValue, readStatus);
     displayBook(libraryContainer[libraryContainer.length - 1]);
     closeModal();
@@ -89,17 +104,20 @@ submitBook.addEventListener('click', function () {
 
 function deleteBook(btn) {
     let currentBook = btn.parentElement;
-    let currentBookTitle = currentBook.getElementsByClassName('book-title');
-    let bookIndex = libraryContainer.findIndex(book => book.title === currentBookTitle);
-    libraryContainer.splice((bookIndex - 1), 1);
+    let currentBookTitle = currentBook.getElementsByClassName('book-title')[0].innerText;
+    let currentBookIndex = libraryContainer.findIndex(book => book.title === currentBookTitle);
+    libraryContainer.splice((currentBookIndex), 1);
     currentBook.remove();
+    localStorage.libraryContainer = JSON.stringify(libraryContainer);
 }
 
-const theHobbit = new Book('The Hobbit', 'J.R.R. Tolkien', 255, true);
-libraryContainer.push(theHobbit);
-
-const harryPotter = new Book('Harry Potter', 'J.K. Rowling', 223, false);
-libraryContainer.push(harryPotter);
+function toggleReadStatus(btn) {
+    let currentBook = btn.parentElement;
+    let currentReadStatus = currentBook.getElementsByClassName('book-status')[0].checked;
+    let currentBookTitle = currentBook.getElementsByClassName('book-title')[0].innerText;
+    let currentBookIndex = libraryContainer.findIndex(book => book.title === currentBookTitle);
+    libraryContainer[currentBookIndex].hasRead = currentReadStatus;
+}
 
 libraryContainer.forEach(book => {
     displayBook(book);
